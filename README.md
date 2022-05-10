@@ -17,7 +17,7 @@ There are 2 separate php processes that must run for DB Server Synchronization
 iterating thru the databases and creating a *.sql file 
 using mysqldump cli and the configuration in the 
 SourceServerConfig.json 
-file and the SyncJobSettings.json file.</li>
+file and the Default_SyncJobSettings.json file or the config file name passed as an argument at runtime</li>
 <br/>
 
 <li> RestoreServiceJob.php - This process is responsible for 
