@@ -1,0 +1,36 @@
+{
+  "directorySettings": {
+    "dataRoot": "DBServerSyncDataRemote",
+    "dumpSqlDirectory": "InProcess",
+    "sqlDirectory": "SQLFiles",
+    "gzDirectory": "Archives",
+    "tempDatabase": "ZZDBServerSync"
+  },
+  "mysqlDumpExtraArgs": [
+    "--no-autocommit",
+    "--single-transaction",
+    "--column-statistics=0",
+    "--ssl-mode=disabled"
+  ],
+  "mysqlExtraArgs": [],
+  "databases": [
+    {
+      "database": "adserver",
+      "dumpStrategy": "BY_TABLE",
+      "excludeTables": [
+        "log"
+      ],
+      "dumpOnlyTables": [],
+      "waitForConditionTables": [],
+      "waitForSqlCondition": null
+    },
+    {
+      "database": "boxes",
+      "dumpStrategy": "BY_TABLE",
+      "excludeTables": [],
+      "dumpOnlyTables": [],
+      "waitForConditionTables": [],
+      "waitForSqlCondition": null
+    }
+  ]
+}

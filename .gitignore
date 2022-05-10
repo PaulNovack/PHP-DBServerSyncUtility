@@ -1,0 +1,8 @@
+/DestinationServerConfig.json
+/SourceServerConfig.json
+/Default_SyncJobSettings.json
+/remove/mysql
+/remove/mysqldump
+.idea/*
+sqls/*
+/remove/*
