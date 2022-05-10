@@ -1,4 +1,4 @@
-# DBServerSyncServices
+# DBServerSyncUtility
 ###  2021 PaulNovack  - BSD License 2.0 - notes at bottom of README.md
 
 
