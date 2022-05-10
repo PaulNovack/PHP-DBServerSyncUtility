@@ -9,6 +9,9 @@ before backing up a list of tables based on a sql statement that evaluates
 to true or false.  Configuration also allows for exclusion of tables that do not need to be synced.
 
 
+Databases are backed up table by table into a temp database.  This is useful for development so that you can continue to do development work as databases are restored.  Tables are placed in temporary database and then moved to the actual database this allows developers to continue to work while a restore is in process in most cases.
+
+
 ### Running the ServerSynServices:
 
 There are 2 separate php processes that must run for DB Server Synchronization
