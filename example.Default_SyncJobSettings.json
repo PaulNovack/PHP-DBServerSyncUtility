@@ -15,7 +15,7 @@
   "mysqlExtraArgs": [],
   "databases": [
     {
-      "database": "adserver",
+      "database": "somedatabase",
       "dumpStrategy": "BY_TABLE",
       "excludeTables": [
         "log"
