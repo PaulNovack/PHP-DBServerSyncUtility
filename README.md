@@ -2,7 +2,7 @@
 ###  2021 PaulNovack  - BSD License 2.0 - notes at bottom of README.md
 
 
-A general purpose configurable Backup Service and Restore Service to sync databases 
+A general purpose configurable Backup Service and Restore Service to sync mySQL databases 
 between servers with options for Full database backups or table by table backups.
 Includes conditions to allow a "wait" for other operations to complete 
 before backing up a list of tables based on a sql statement that evaluates 
