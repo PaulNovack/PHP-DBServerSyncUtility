@@ -11,6 +11,8 @@ to true or false.  Configuration also allows for exclusion of tables that do not
 
 Databases are backed up table by table into a temp database.  This is useful for development so that you can continue to do development work as databases are restored.  Tables are placed in temporary database and then moved to the actual database this allows developers to continue to work while a restore is in process in most cases.
 
+Rather than dumping entire database with mysqldump this does so by tables without as much of an interruption.
+
 
 ### Running the ServerSynServices:
 
