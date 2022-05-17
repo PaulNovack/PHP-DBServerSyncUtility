@@ -1,6 +1,7 @@
 # DBServerSyncUtility
 ###  2021 PaulNovack  - BSD License 2.0 - notes at bottom of README.md
 
+* Note:  There is a bug in not properly escaping certain reserved words in table names needs to be fixed.  Should get to it soon....
 
 A general purpose configurable Backup Service and Restore Service to sync mySQL databases 
 between servers with table by table backups.
