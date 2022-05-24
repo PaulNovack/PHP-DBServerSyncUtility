@@ -1,4 +1,7 @@
 # DBServerSyncUtility
+
+<img src="https://user-images.githubusercontent.com/3844301/170073844-9e893950-2ca9-4a53-a672-c6724f6de4ca.jpeg" alt="drawing" width="250"/>
+
 ###  2021 PaulNovack  - BSD License 2.0 - notes at bottom of README.md
 
 * Note:  There is a bug in not properly escaping certain reserved words in table names needs to be fixed.  Should get to it soon....
