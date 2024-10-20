@@ -36,24 +36,16 @@ class DumpGenerator
             . " "
             . $this->bsc->database
             . " " . $table;
-            if(in_array($table,$this->bsc->filterTables[0]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[0]->filterWhere . "'";
+        $idx = 0;
+        foreach($this->bsc->filterTables as $index){
+            if(in_array($table,$this->bsc->filterTables[$idx]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[$idx]->filterWhere . "'";
             }
-            if(in_array($table,$this->bsc->filterTables[1]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[1]->filterWhere . "'";
-            }
-            if(in_array($table,$this->bsc->filterTables[2]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[2]->filterWhere . "'";
-            }
-            if(in_array($table,$this->bsc->filterTables[3]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[3]->filterWhere . "'";
-            }
-            if(in_array($table,$this->bsc->filterTables[4]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[4]->filterWhere . "'";
-            }
-            $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
+        }
+        $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         $startTime = microtime(true);
         echo "Processing: " . $table . PHP_EOL;
+        //echo $command;
         system($command);
         $endTime = microtime(true);
         $elapsedTime = $endTime - $startTime;

@@ -51,6 +51,7 @@ public function getStateContainersArray(SQLInterface $sqlInterface,$backingup = 
             $bsc = new BackupStateContainer($d->database,
                             $d->dumpStrategy,
                             $d->excludeTables,
+                            $d->filterIds,
                             $d->filterTables,
                             $sqlInterface,
                             $backingup);
