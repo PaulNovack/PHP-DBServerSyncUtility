@@ -1,36 +1,45 @@
 {
   "directorySettings": {
-    "dataRoot": "DBServerSyncDataRemote",
+    "dataRoot": "DbServerSync",
     "dumpSqlDirectory": "InProcess",
     "sqlDirectory": "SQLFiles",
     "gzDirectory": "Archives",
-    "tempDatabase": "ZZDBServerSync"
+    "tempDatabase": "TempGasStationDB"
   },
   "mysqlDumpExtraArgs": [
     "--no-autocommit",
     "--single-transaction",
-    "--column-statistics=0",
-    "--ssl-mode=disabled"
+    "--no-tablespaces"
   ],
   "mysqlExtraArgs": [],
   "databases": [
     {
-      "database": "somedatabase",
+      "database": "gas_stations",
       "dumpStrategy": "BY_TABLE",
       "excludeTables": [
-        "log"
+        "copy_of_employees-10-18-07",
+        "debug_logs",
+        "sales_prior-10-2-01",
+        "user_action_logs"
       ],
-      "dumpOnlyTables": [],
-      "waitForConditionTables": [],
-      "waitForSqlCondition": null
-    },
-    {
-      "database": "boxes",
-      "dumpStrategy": "BY_TABLE",
-      "excludeTables": [],
-      "dumpOnlyTables": [],
-      "waitForConditionTables": [],
-      "waitForSqlCondition": null
+      "filterIds": [212, 2432, 3456],
+      "filterTables": [
+        {
+          "getTablesSql": "SELECT table_name FROM information_schema.columns WHERE table_schema = 'gas_stations' AND column_name = 'station_id'",
+          "filterWhere": "station_id IN ({filterIds})",
+          "tables": []
+        },
+        {
+          "getTablesSql": "",
+          "filterWhere": "employee_id IN (SELECT employee_id FROM employees WHERE station_id IN ({filterIds})",
+          "tables": ["employee_hours"]
+        },
+        {
+          "getTablesSql": "",
+          "filterWhere": "sale_id IN (SELECT sale_id FROM sales WHERE station_id IN {filterIds}))",
+          "tables": ["sale_items"]
+        }
+      ]
     }
   ]
 }
