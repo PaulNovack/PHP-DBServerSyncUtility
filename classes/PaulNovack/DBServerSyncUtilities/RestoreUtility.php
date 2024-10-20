@@ -9,7 +9,6 @@ class RestoreUtility
     private  $cl;
     private  $sl;
     private  $si;
-    private  $lg;
     private  $bscs;
     private  $startSeconds; // seconds since epoch
     private  $maxRunTimeSeconds; // diff in start and current seconds that will do shutdown
@@ -47,11 +46,10 @@ class RestoreUtility
                 $sqlFiles = $this->getFilenames($directory);
                 if( sizeof($sqlFiles) > 0){
                     // Check if processing if not run in thread up to RestoreThreads at a time
-
                     $path_parts = pathinfo($sqlFiles[0]);
                     $table = $path_parts['filename'];
                     $lg = new LoadGenerator($this->cl,$this->sl,$bsc);
-                    $lg->GenerateLoadCommand($bsc->database,$table);
+                    $lg->GenerateLoadCommand($table);
                     $lg->DeleteSQLFile($bsc->database,$table);
                     $this->si->MoveTable($bsc->database,$table);
                 }

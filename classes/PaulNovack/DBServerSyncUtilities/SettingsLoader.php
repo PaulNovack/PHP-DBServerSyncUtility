@@ -5,7 +5,6 @@ namespace PaulNovack\DBServerSyncUtilities;
 class SettingsLoader
 {
     public $configFields;
-    public  $dataRoot;
     public  $dumpSqlDirectory;
     public  $sqlDirectory;
     public  $gzDirectory;
@@ -44,7 +43,7 @@ class SettingsLoader
         return null;
     }
 
-public function getStateContainersArray(SQLInterface $sqlInterface,$calculateTablesToProcess)
+public function getStateContainersArray(SQLInterface $sqlInterface,$backingup = false) : array
     {
         $backupStateContainersArray = [];
         foreach ($this->configFields->databases as $database) {
@@ -52,11 +51,9 @@ public function getStateContainersArray(SQLInterface $sqlInterface,$calculateTab
             $bsc = new BackupStateContainer($d->database,
                             $d->dumpStrategy,
                             $d->excludeTables,
-                            $d->dumpOnlyTables,
-                            $d->waitForConditionTables,
-                            $d->waitForSqlCondition,
+                            $d->filterTables,
                             $sqlInterface,
-                            $calculateTablesToProcess);
+                            $backingup);
             array_push($backupStateContainersArray,$bsc);
         }
         return $backupStateContainersArray;

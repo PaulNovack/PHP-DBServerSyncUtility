@@ -9,7 +9,6 @@ class BackupUtility
     private  $cl;
     private  $sl;
     private  $si;
-    private  $dg;
     private  $bscs;
 
 
@@ -38,19 +37,7 @@ class BackupUtility
                             unset($backup->anytimeTablesNotProcessed[$key]);
                         }
                     }
-                    if($backup->waitForSqlCondition != "" && $backup->waitForSqlCondition != null){
-                        if($this->si->getIsRunnable($backup->database,$backup->waitForSqlCondition)){
-                            foreach($backup->waitTableNotProcessed as $table){
-                                foreach($backup->waitTableNotProcessed as $table){
-                                    $dg->GenerateTableCommand($table);
-                                    if (($key = array_search($table, $backup->waitTableNotProcessed)) !== false) {
-                                        unset($backup->waitTableNotProcessed[$key]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if(sizeof($backup->waitTableNotProcessed) == 0 && sizeof($backup->anytimeTablesNotProcessed) == 0){
+                    if(sizeof($backup->anytimeTablesNotProcessed) == 0){
                         $backup->completed = true;
                     } else {
                         $remainingWork = true;

@@ -24,19 +24,18 @@ class LoadGenerator
 
     /**
      * @param string|null $table
-     * @param string $extraArgs
      * @return string
      */
-    public function GenerateLoadCommand(string $database,string $table)
+    public function GenerateLoadCommand(string $table) : void
     {
           $command =
             $this->cl->mysqlBinaryPath . " -h "
             . $this->cl->server
             . " -u"
             . $this->cl->user
-            . " -p"
+            . " -p'"
             . $this->cl->password
-            . " "
+            . "' "
             . $this->sl->tempDB
             . " < " . $this->sl->sqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         echo $command . PHP_EOL;
@@ -50,7 +49,7 @@ class LoadGenerator
      * @param string $table
      * @return void
      */
-    public function DeleteSQLFile(string $database, string $table)
+    public function DeleteSQLFile(string $database, string $table) :void
     {
         $file =  $this->sl->sqlDirectory
             . "/"

@@ -19,10 +19,9 @@ class DumpGenerator
 
     /**
      * @param string|null $table
-     * @param string $extraArgs
      * @return string
      */
-    public function GenerateTableCommand(string $table = null)
+    public function GenerateTableCommand(string $table = null) : void
     {
         $processingFile = $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         $doneFile = $this->sl->sqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
@@ -31,15 +30,47 @@ class DumpGenerator
             . $this->cl->server
             . " -u"
             . $this->cl->user
-            . " -p"
+            . " -p'"
             . $this->cl->password
-            . " " . implode(" ",$this->sl->mysqlExtraArgs)
+            . "' " . implode(" ",$this->sl->mysqlExtraArgs)
             . " "
             . $this->bsc->database
-            . " " . $table . " > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
-        echo $command . PHP_EOL;
+            . " " . $table;
+            if(in_array($table,$this->bsc->filterTables[0]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[0]->filterWhere . "'";
+            }
+            if(in_array($table,$this->bsc->filterTables[1]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[1]->filterWhere . "'";
+            }
+            if(in_array($table,$this->bsc->filterTables[2]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[2]->filterWhere . "'";
+            }
+            if(in_array($table,$this->bsc->filterTables[3]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[3]->filterWhere . "'";
+            }
+            if(in_array($table,$this->bsc->filterTables[4]->tables)){
+                $command .= " --where='" . $this->bsc->filterTables[4]->filterWhere . "'";
+            }
+            $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
+        $startTime = microtime(true);
+        echo "Processing: " . $table . PHP_EOL;
         system($command);
-        rename($processingFile,$doneFile);
+        $endTime = microtime(true);
+        $elapsedTime = $endTime - $startTime;
+        $formattedTime = number_format($elapsedTime, 2);
+        if(file_exists($processingFile)){
+            $fileSizeInBytes = filesize($processingFile);
+            echo "\033[F";
+            echo "Processing: " . $table;
+            echo " " . sprintf("%.4f",$fileSizeInBytes / (1024 * 1024)) . " MB ";
+            $Checkbox = '✔';
+            echo $Checkbox . " Done";
+            echo "  Elapsed time: " . $formattedTime . " seconds.";
+            rename($processingFile,$doneFile);
+        } else {
+            echo " Error occurred no dump file created.";
+        }
+        echo PHP_EOL;
     }
     public function GenerateFullDBCommand()
     {

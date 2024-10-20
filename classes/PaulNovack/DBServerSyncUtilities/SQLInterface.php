@@ -7,10 +7,7 @@ class SQLInterface
     private  $cl;
     private  $sl;
     private  $mysqli;
-    private  $isSource = true; // Safety no change operations on prod only read.
-    private $connectedDatabase = null;
     public  $databasesOnServer;
-
 
     public function __construct(ConfigLoader $cl,
                 SettingsLoader $sl)
@@ -24,17 +21,22 @@ class SQLInterface
         $this->connectToDB($database);
         if($this->mysqli->connect_error != ""){
             echo $this->mysqli->connect_error . PHP_EOL;
-            die();
+            die("No Temp Database!!");
         }
     }
     public function MoveTable($destDatabase,$table){
         $database = $this->sl->tempDB;
         $this->connectToDB($database);
-        $query = "drop table " . $destDatabase . ".`" . $table . "`";
+
+        $query = "drop table if exists " . $destDatabase . ".`" . $table . "`";
         $result = $this->mysqli->query($query);
         echo $query . PHP_EOL;
-        $query = "RENAME TABLE " . $this->sl->tempDB . ".`"  . $table . "` TO " . $destDatabase . ".`"  . $table . "`";
-        $result = $this->mysqli->query($query);
+        try {
+            $query = "RENAME TABLE " . $this->sl->tempDB . ".`" . $table . "` TO " . $destDatabase . ".`" . $table . "`";
+            $result = $this->mysqli->query($query);
+        } catch(\Exception $e){
+            echo "Exception " . $e->getMessage();
+        }
         echo $query . PHP_EOL;
     }
     private function connectToDB($database = null){
@@ -49,16 +51,26 @@ class SQLInterface
     }
     public function getTableNames($database){
         $tables = [];
-        //if($this->connectedDatabase != $database){
-            $this->connectToDB($database);
-       // }
+        $this->connectToDB($database);
         $query = "show tables";
         $result = $this->mysqli->query($query);
         while ($row = $result->fetch_assoc()) {
-            array_push($tables,$row['Tables_in_' . $database]);
+            if(!strstr($row['Tables_in_' . $database],'view')){
+                array_push($tables,$row['Tables_in_' . $database]);
+            }
         }
-        echo $query . PHP_EOL;
         return $tables;
+    }
+    public function getFilterTables($database = null, string $sql) : array {
+        $filterTables = [];
+        $this->connectToDB($database);
+        $query = $sql;
+        echo "Filter Table Query: " . $query;
+        $result = $this->mysqli->query($query);
+        while($row = $result->fetch_assoc()){
+            array_push($filterTables,$row['table_name']);
+        }
+        return $filterTables;
     }
     public function getListOfDatabases($database = null) : array {
         $databases = [];
@@ -68,25 +80,12 @@ class SQLInterface
         while ($row = $result->fetch_assoc()) {
             array_push($databases,$row['Database']);
         }
-        echo $query . PHP_EOL;
         $this->databasesOnServer = $databases;
         return $databases;
     }
     public function createMissingDatabase($database){
         $this->connectToDB();
         $query = "create database " . $database;
-        $result = $this->mysqli->query($query);
+        $this->mysqli->query($query);
     }
-
-    public function getIsRunnable($database,$waitForSqlCondition){
-        //if($this->connectedDatabase != $database){
-        $this->connectToDB($database);
-        //}
-        $query = $waitForSqlCondition;
-        echo "GetIsRunnable: " . $database . "||" . $query;
-        $result = $this->mysqli->query($query);
-        $row = $result->fetch_assoc();
-        return (bool)$row['runnable'];
-    }
-
 }
