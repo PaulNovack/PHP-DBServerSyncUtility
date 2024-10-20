@@ -12,6 +12,7 @@ Includes conditions to allow a "wait" for other operations to complete
 before backing up a list of tables based on a sql statement that evaluates 
 to true or false.  Configuration also allows for exclusion of tables that do not need to be synced.
 
+see article at https://paulnovack.net/article/The%20Value%20of%20a%20Partial%20Database%20Mirroring%20Application%20for%20Web%20Application%20Developers for more information.
 
 Databases are backed up table by table into a temp database.  This is useful for development so that you can continue to do development work as databases are restored.  Tables are placed in temporary database and then moved to the actual database this allows developers to continue to work while a restore is in process in most cases.
 
