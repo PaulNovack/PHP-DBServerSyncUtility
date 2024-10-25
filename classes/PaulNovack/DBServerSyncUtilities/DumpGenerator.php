@@ -45,7 +45,9 @@ class DumpGenerator
         }
         $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         $startTime = microtime(true);
-        echo $command . PHP_EOL;
+        if($this->sl->debug){
+            echo $command . PHP_EOL;
+        }
         echo "Processing: " . $table . PHP_EOL;
         system($command);
         $endTime = microtime(true);

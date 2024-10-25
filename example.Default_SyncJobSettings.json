@@ -12,6 +12,7 @@
     "--no-tablespaces"
   ],
   "mysqlExtraArgs": [],
+  "debug": true,
   "databases": [
     {
       "database": "gas_stations",
@@ -22,6 +23,7 @@
         "sales_prior-10-2-01",
         "user_action_logs"
       ],
+      "filterValue": 3,
       "filterIds": [212, 2432, 3456],
       "filterTables": [
         {

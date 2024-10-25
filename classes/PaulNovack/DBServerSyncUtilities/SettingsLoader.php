@@ -10,6 +10,7 @@ class SettingsLoader
     public  $gzDirectory;
     public $tempDB;
     public $mysqlExtraArgs;
+    public $debug;
 
     public function __construct($settingsFilename)
     {
@@ -51,6 +52,7 @@ public function getStateContainersArray(SQLInterface $sqlInterface,$backingup = 
             $bsc = new BackupStateContainer($d->database,
                             $d->dumpStrategy,
                             $d->excludeTables,
+                            $d->filterValue,
                             $d->filterIds,
                             $d->filterTables,
                             $sqlInterface,

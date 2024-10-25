@@ -16,6 +16,7 @@ class BackupStateContainer
      * @param string $database
      * @param string $dumpStrategy
      * @param array $excludeTables
+     * @param string $filterValue
      * @param array $filterIds
      * @param array $filterTables
      * @param SQLInterface $sqlInterface
@@ -25,6 +26,7 @@ class BackupStateContainer
     public function __construct(string       $database,
                                 string       $dumpStrategy,
                                 array        $excludeTables,
+                                string       $filterValue,
                                 array        $filterIds,
                                 array        $filterTables,
                                 SQLInterface $sqlInterface,
@@ -34,6 +36,7 @@ class BackupStateContainer
         $this->database = $database;
         $this->dumpStrategy = $dumpStrategy;
         $this->excludeTables = $excludeTables;
+        $this->filterValue = $filterValue;
         $this->filterIds = $filterIds;
         $this->filterTables = $filterTables;
         $this->sqlInterface = $sqlInterface;
@@ -57,7 +60,9 @@ class BackupStateContainer
         $idx = 0;
         foreach($this->filterTables as $index){
             $this->filterTables[$idx]->getTablesSql = $this->replacePlaceholder($this->filterTables[$idx]->getTablesSql,'filterIds',$this->filterIds);
+            $this->filterTables[$idx]->getTablesSql = $this->replacePlaceholder($this->filterTables[$idx]->getTablesSql,'filterValue',$this->filterValue);
             $this->filterTables[$idx]->filterWhere = $this->replacePlaceholder($this->filterTables[$idx]->filterWhere,'filterIds',$this->filterIds);
+            $this->filterTables[$idx]->filterWhere = $this->replacePlaceholder($this->filterTables[$idx]->filterWhere,'filterValue',$this->filterValue);
             if($this->filterTables[$idx]->getTablesSql != "" && $this->filterTables[$idx]->getTablesSql != null){
                 $filterTables = $this->sqlInterface->getFilterTables($this->database,$this->filterTables[$idx]->getTablesSql);
                 $this->filterTables[$idx]->tables = $filterTables;

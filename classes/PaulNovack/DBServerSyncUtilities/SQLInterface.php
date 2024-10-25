@@ -42,10 +42,34 @@ class SQLInterface
     private function connectToDB($database = null){
         $c = $this->cl;
         if($database == null){
-            $this->mysqli = new \mysqli($c->server, $c->user,$c->password,$c->database);
+            $this->mysqli = new \mysqli($c->server, $c->user, $c->password);
+            if ($this->mysqli->connect_error) {
+                die("Connection failed: " . $this->mysqli->connect_error);
+            }
+            $result = $this->mysqli->query("SHOW DATABASES LIKE '%" . $c->database . "%'");
+            if ($result->num_rows == 0) {
+                if ($this->mysqli->query("CREATE DATABASE `" . $c->database . "`")) {
+                    echo "Database: " . $c->database . " created successfully.";
+                } else {
+                    die("Error creating database: " . $this->mysqli->error);
+                }
+            }
+            $this->mysqli->select_db($c->database);
             $this->connectedDatabase = $c->database;
         } else {
-            $this->mysqli = new \mysqli($c->server, $c->user,$c->password,$database);
+            $this->mysqli = new \mysqli($c->server, $c->user, $c->password);
+            if ($this->mysqli->connect_error) {
+                die("Connection failed: " . $this->mysqli->connect_error);
+            }
+            $result = $this->mysqli->query("SHOW DATABASES LIKE '%" . $database . "%'");
+            if ($result->num_rows == 0) {
+                if ($this->mysqli->query("CREATE DATABASE `" . $database . "`")) {
+                    echo "Database: " . $database . " created successfully.";
+                } else {
+                    die("Error creating database: " . $this->mysqli->error);
+                }
+            }
+            $this->mysqli->select_db($database);
             $this->connectedDatabase = $database;
         }
     }
