@@ -41,11 +41,12 @@ class DumpGenerator
             if(in_array($table,$this->bsc->filterTables[$idx]->tables)){
                 $command .= " --where='" . $this->bsc->filterTables[$idx]->filterWhere . "'";
             }
+            $idx++;
         }
         $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         $startTime = microtime(true);
+        echo $command . PHP_EOL;
         echo "Processing: " . $table . PHP_EOL;
-        //echo $command;
         system($command);
         $endTime = microtime(true);
         $elapsedTime = $endTime - $startTime;

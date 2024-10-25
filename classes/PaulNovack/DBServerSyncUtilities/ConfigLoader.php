@@ -17,8 +17,8 @@ class ConfigLoader
         foreach($configFields as $key => $value){
             $this->{$key} = $value;
         }
-        $compiledmysqlDump = "mysqlbinaries/mysqldump";
-        $compiledmysql = "mysqlbinaries/mysql";
+        $compiledmysqlDump = "/opt/homebrew/Cellar/mysql@8.4/8.4.3/bin/mysqldump";
+        $compiledmysql = "/opt/homebrew/Cellar/mysql@8.4/8.4.3/bin/mysql";
         if(file_exists($compiledmysqlDump)){
             $this->mysqldumpBinaryPath = $compiledmysqlDump;
         } else {
