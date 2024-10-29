@@ -92,6 +92,7 @@ class SQLInterface
         echo "Filter Table Query: " . $query;
         $result = $this->mysqli->query($query);
         while($row = $result->fetch_assoc()){
+            //echo $row['TABLE_NAME'] . PHP_EOL;
             array_push($filterTables,$row['TABLE_NAME']);
         }
         return $filterTables;

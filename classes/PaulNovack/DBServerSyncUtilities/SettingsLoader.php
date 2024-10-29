@@ -41,6 +41,7 @@ class SettingsLoader
         }
         $this->tempDB = $this->configFields->directorySettings->tempDatabase;
         $this->mysqlExtraArgs = $this->configFields->mysqlDumpExtraArgs;
+        $this->debug = $this->configFields->debug;
         return null;
     }
 
