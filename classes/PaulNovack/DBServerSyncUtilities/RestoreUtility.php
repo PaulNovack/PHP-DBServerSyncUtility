@@ -67,7 +67,9 @@ class RestoreUtility
         foreach (new \DirectoryIterator($path) as $fileInfo) {
             if($fileInfo->isDot()) continue;
             $file =  $fileInfo->getFilename();
-            array_push($files,$file);
+            if($file != ".DS_Store"){
+                array_push($files,$file);
+            }
         }
         return $files;
     }

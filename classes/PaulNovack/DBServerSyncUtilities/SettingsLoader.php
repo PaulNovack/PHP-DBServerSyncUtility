@@ -52,11 +52,13 @@ public function getStateContainersArray(SQLInterface $sqlInterface,$backingup = 
             $d = $database;
             $bsc = new BackupStateContainer($d->database,
                             $d->dumpStrategy,
+                            $d->dumpOnlyTables,
                             $d->excludeTables,
                             $d->filterValue,
                             $d->filterIds,
                             $d->filterTables,
                             $sqlInterface,
+                            $backingup,
                             $backingup);
             array_push($backupStateContainersArray,$bsc);
         }

@@ -16,6 +16,7 @@ if (!flock($fp, LOCK_EX | LOCK_NB)) {
 }
 
 
+
 $settingsFileName = "Default_SyncJobSettings.json";
 
 if(isset($argv[1])){

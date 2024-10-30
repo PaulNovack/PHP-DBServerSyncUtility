@@ -45,27 +45,31 @@ class DumpGenerator
         }
         $command .=" > " . $this->sl->dumpSqlDirectory ."/" . $this->bsc->database . "/" . $table . '.sql';
         $startTime = microtime(true);
-        if($this->sl->debug){
-            echo $command . PHP_EOL;
+
+        if(sizeof($this->bsc->dumpOnlyTables) == 0  || in_array($table,$this->bsc->dumpOnlyTables)){
+            if($this->sl->debug){
+                echo $command . PHP_EOL;
+            }
+            echo "Processing: " . $table . PHP_EOL;
+            system($command);
+            $endTime = microtime(true);
+            $elapsedTime = $endTime - $startTime;
+            $formattedTime = number_format($elapsedTime, 2);
+            if(file_exists($processingFile)){
+                $fileSizeInBytes = filesize($processingFile);
+                echo "\033[F";
+                echo "Processing: " . $table;
+                echo " " . sprintf("%.4f",$fileSizeInBytes / (1024 * 1024)) . " MB ";
+                $Checkbox = '✔';
+                echo $Checkbox . " Done";
+                echo "  Elapsed time: " . $formattedTime . " seconds.";
+                rename($processingFile,$doneFile);
+            } else {
+                echo " Error occurred no dump file created.";
+            }
+            echo PHP_EOL;
         }
-        echo "Processing: " . $table . PHP_EOL;
-        system($command);
-        $endTime = microtime(true);
-        $elapsedTime = $endTime - $startTime;
-        $formattedTime = number_format($elapsedTime, 2);
-        if(file_exists($processingFile)){
-            $fileSizeInBytes = filesize($processingFile);
-            echo "\033[F";
-            echo "Processing: " . $table;
-            echo " " . sprintf("%.4f",$fileSizeInBytes / (1024 * 1024)) . " MB ";
-            $Checkbox = '✔';
-            echo $Checkbox . " Done";
-            echo "  Elapsed time: " . $formattedTime . " seconds.";
-            rename($processingFile,$doneFile);
-        } else {
-            echo " Error occurred no dump file created.";
-        }
-        echo PHP_EOL;
+
     }
     public function GenerateFullDBCommand()
     {

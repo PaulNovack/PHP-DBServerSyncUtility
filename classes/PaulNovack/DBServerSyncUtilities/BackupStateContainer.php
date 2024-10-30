@@ -6,6 +6,7 @@ class BackupStateContainer
 {
     public  $database;
     public  $dumpStrategy;
+    public $dumpOnlyTables;
     public  $excludeTables;
     private $sqlInterface;
     public  $anytimeTablesNotProcessed;
@@ -15,6 +16,7 @@ class BackupStateContainer
     /**
      * @param string $database
      * @param string $dumpStrategy
+     * @param array $dumpOnlyTables
      * @param array $excludeTables
      * @param string $filterValue
      * @param array $filterIds
@@ -25,6 +27,7 @@ class BackupStateContainer
      */
     public function __construct(string       $database,
                                 string       $dumpStrategy,
+                                array        $dumpOnlyTables,
                                 array        $excludeTables,
                                 string       $filterValue,
                                 array        $filterIds,
@@ -35,13 +38,14 @@ class BackupStateContainer
     {
         $this->database = $database;
         $this->dumpStrategy = $dumpStrategy;
+        $this->dumpOnlyTables = $dumpOnlyTables;
         $this->excludeTables = $excludeTables;
         $this->filterValue = $filterValue;
         $this->filterIds = $filterIds;
         $this->filterTables = $filterTables;
         $this->sqlInterface = $sqlInterface;
-        $this->completed = false;
         $this->calculateTablesToProcess = $calculateTablesToProcess;
+        $this->backingup = $backingup;
         if($this->calculateTablesToProcess){
             $this->CalculateTablesToProcess();
         }
@@ -54,8 +58,34 @@ class BackupStateContainer
 
     public function CalculateTablesToProcess(){
         $tablesInDB = $this->sqlInterface->getTableNames($this->database);
-        $this->anytimeTablesNotProcessed = array_diff($tablesInDB, $this->excludeTables);
+        $this->anytimeTablesNotProcessed = $this->GetTablesToProcess($tablesInDB, $this->excludeTables);
     }
+    public function GetTablesToProcess(array $source, array $exclude): array
+    {
+        $tablesToProcess = [];
+
+        foreach ($source as $table) {
+            $shouldExclude = false;
+            foreach ($exclude as $excluded) {
+                if ($table === $excluded) {
+                    $shouldExclude = true;
+                    break;
+                }
+                if (strpos($excluded, '*') !== false) {
+                    $prefix = rtrim($excluded, '*');
+                    if (strpos($table, $prefix) === 0) {
+                        $shouldExclude = true;
+                        break;
+                    }
+                }
+            }
+            if (!$shouldExclude) {
+                $tablesToProcess[] = $table;
+            }
+        }
+        return $tablesToProcess;
+    }
+
     public function GetFilterTables(){
         $idx = 0;
         foreach($this->filterTables as $index){
