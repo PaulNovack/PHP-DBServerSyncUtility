@@ -51,7 +51,7 @@ class RestoreUtility
                     $lg = new LoadGenerator($this->cl,$this->sl,$bsc);
                     $lg->GenerateLoadCommand($table);
                     $lg->DeleteSQLFile($bsc->database,$table);
-                    $this->si->MoveTable($bsc->database,$table);
+                    //$this->si->MoveTable($bsc->database,$table);
                 }
             }
             echo "sleeping 1 seconds....." . PHP_EOL;

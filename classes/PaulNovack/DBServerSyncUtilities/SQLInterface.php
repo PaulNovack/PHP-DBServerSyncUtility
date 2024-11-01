@@ -27,7 +27,7 @@ class SQLInterface
     public function MoveTable($destDatabase,$table){
         $database = $this->sl->tempDB;
         $this->connectToDB($database);
-
+        $result = $this->mysqli->query('SET foreign_key_checks = 0');
         $query = "drop table if exists " . $destDatabase . ".`" . $table . "`";
         $result = $this->mysqli->query($query);
         echo $query . PHP_EOL;
@@ -37,6 +37,7 @@ class SQLInterface
         } catch(\Exception $e){
             echo "Exception " . $e->getMessage();
         }
+        $result = $this->mysqli->query('SET foreign_key_checks = 1');
         echo $query . PHP_EOL;
     }
     private function connectToDB($database = null){

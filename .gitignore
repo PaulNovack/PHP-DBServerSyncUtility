@@ -1,6 +1,8 @@
 /DestinationServerConfig.json
 /SourceServerConfig.json
 /Default_SyncJobSettings.json
+/User_SyncJobSettings.json
+/LoginTables_SyncJobSettings.json
 /remove/mysql
 /remove/mysqldump
 .idea/*
