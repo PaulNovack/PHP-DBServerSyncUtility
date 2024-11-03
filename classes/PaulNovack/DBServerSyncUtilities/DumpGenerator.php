@@ -39,7 +39,11 @@ class DumpGenerator
         $idx = 0;
         foreach($this->bsc->filterTables as $index){
             if(in_array($table,$this->bsc->filterTables[$idx]->tables)){
-                $command .= " --where='" . $this->bsc->filterTables[$idx]->filterWhere . "'";
+                if($this->bsc->filterTables[$idx]->filterWhere == "--no-data"){
+                    $command .= " --no-data";
+                } else {
+                    $command .= " --where='" . $this->bsc->filterTables[$idx]->filterWhere . "'";
+                }
             }
             $idx++;
         }
